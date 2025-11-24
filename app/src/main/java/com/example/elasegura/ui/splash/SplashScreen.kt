@@ -1,4 +1,4 @@
-package com.example.elasegura
+package com.example.elasegura.ui.splash
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
