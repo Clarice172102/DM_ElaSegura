@@ -3,19 +3,25 @@ package com.example.elasegura
 import androidx.activity.compose.setContent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
-import com.example.elasegura.ui.navigation.MainScreen
+import com.example.elasegura.model.MainViewModel
 import com.example.elasegura.ui.navigation.NavGraph
 import com.example.elasegura.ui.theme.ElaSeguraTheme
+import kotlin.getValue
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        val viewModel : MainViewModel by viewModels()
         setContent {
-            MainScreen()
             ElaSeguraTheme {
                 val navController = rememberNavController()
-                NavGraph(navController)
+                val viewModel: MainViewModel = viewModel() // ViewModel compartilhado
+                NavGraph(navController = navController, viewModel = viewModel)
             }
         }
     }

@@ -1,5 +1,9 @@
 package com.example.elasegura.ui.splash
 
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -19,6 +23,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -29,35 +34,54 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.elasegura.R
+import com.example.elasegura.model.MainViewModel
+import com.example.elasegura.ui.theme.ElaSeguraTheme
 
+class HomeActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        val viewModel = MainViewModel()
+        setContent {
+            ElaSeguraTheme {
+                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                    HomeScreen (
+                        modifier = Modifier.padding(innerPadding),
+                        viewModel = viewModel
+                    )
+                }
+            }
+        }
+    }
+}
 @Composable
 fun HomeScreen(
+    modifier: Modifier = Modifier,
+    viewModel: MainViewModel,
     onPrecisoAjuda: () -> Unit = {},
     onAmeacada: () -> Unit = {},
     onEstouBem: () -> Unit = {}
 ) {
-
+    // Gradiente de fundo
     val gradient = Brush.verticalGradient(
         colors = listOf(
-            Color(0xFFCAB0EE),  // Roxo claro no meio
-            Color(0xFFCAB0EE),  // Roxo claro no meio
-            Color(0xFFCAB0EE),  // Roxo claro no meio
-            Color(0xFFEFD9FF),  // Roxo claro no meio
-            Color(0xFFF3E5F5),   // Branco no final
-            Color(0xFFF3E5F5)   // Branco no final
+            Color(0xFFCAB0EE),  // Roxo claro
+            Color(0xFFCAB0EE),
+            Color(0xFFF3E5F5),  // Branco
+            Color(0xFFF3E5F5),
+            Color(0xFFF3E5F5)
         ),
         startY = 0f,
-        endY = 1200f   // aumenta ou diminui para controlar a transição
+        endY = 1200f
     )
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .background(gradient)
             .padding(horizontal = 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
         Spacer(modifier = Modifier.height(50.dp))
 
         // LOGO

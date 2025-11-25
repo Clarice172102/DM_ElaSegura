@@ -1,45 +1,39 @@
 package com.example.elasegura.ui.splash
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import kotlinx.coroutines.delay
 import com.example.elasegura.R
-import com.example.elasegura.ui.navigation.Routes
+import com.example.elasegura.model.MainViewModel
+import com.example.elasegura.model.Route
+
 
 @Composable
-fun SplashScreen(navController: NavController) {
-
-    // Delay para trocar de tela
+fun SplashScreen(
+    navController: NavController,
+    viewModel: MainViewModel,
+    modifier: Modifier = Modifier
+) {
     LaunchedEffect(Unit) {
-        delay(1000) // 3 segundos
-        navController.navigate(Routes.Home.route) {
-            popUpTo(Routes.Splash.route) { inclusive = true }
+        kotlinx.coroutines.delay(1500)
+        navController.navigate(Route.Home.route) {
+            popUpTo(Route.Splash.route) { inclusive = true }
         }
     }
 
     Box(
-        modifier = Modifier
-            .fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-
-            Image(
-                painter = painterResource(id = R.drawable.logo_elasegura),
-                contentDescription = "Logo ElaSegura"
-            )
-        }
+        Image(
+            painter = painterResource(id = R.drawable.logo_elasegura),
+            contentDescription = null
+        )
     }
 }
