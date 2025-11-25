@@ -1,7 +1,9 @@
 package com.example.elasegura.ui.theme
 
 import androidx.compose.ui.graphics.Color
+import com.example.elasegura.ui.theme.Lavender
 
+val Lavender = Color(0xFFF3E5F5)
 val Purple80 = Color(0xFFD0BCFF)
 val PurpleGrey80 = Color(0xFFCCC2DC)
 val Pink80 = Color(0xFFEFB8C8)

@@ -1,4 +1,4 @@
-package com.example.elasegura.navigation
+package com.example.elasegura.ui.navigation
 
 sealed class Routes(val route: String) {
     object Splash : Routes("splash")

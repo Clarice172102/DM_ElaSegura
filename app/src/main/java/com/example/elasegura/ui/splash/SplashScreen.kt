@@ -13,15 +13,16 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import kotlinx.coroutines.delay
 import com.example.elasegura.R
+import com.example.elasegura.ui.navigation.Routes
 
 @Composable
 fun SplashScreen(navController: NavController) {
 
     // Delay para trocar de tela
     LaunchedEffect(Unit) {
-        delay(2000) // 2 segundos
-        navController.navigate("home") {
-            popUpTo("splash") { inclusive = true }
+        delay(1000) // 3 segundos
+        navController.navigate(Routes.Home.route) {
+            popUpTo(Routes.Splash.route) { inclusive = true }
         }
     }
 
@@ -37,16 +38,7 @@ fun SplashScreen(navController: NavController) {
 
             Image(
                 painter = painterResource(id = R.drawable.logo_elasegura),
-                contentDescription = "Logo ElaSegura",
-                modifier = Modifier.size(180.dp)
-            )
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Text(
-                text = "ElaSegura",
-                fontSize = 28.sp,
-                color = MaterialTheme.colorScheme.primary
+                contentDescription = "Logo ElaSegura"
             )
         }
     }
