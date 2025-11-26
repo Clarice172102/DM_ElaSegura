@@ -16,12 +16,12 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        val viewModel : MainViewModel by viewModels()
         setContent {
             ElaSeguraTheme {
                 val navController = rememberNavController()
-                val viewModel: MainViewModel = viewModel() // ViewModel compartilhado
-                NavGraph(navController = navController, viewModel = viewModel)
+                val mainViewModel: MainViewModel = viewModel()
+
+                NavGraph(navController = navController, viewModel = mainViewModel)
             }
         }
     }
