@@ -7,8 +7,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.elasegura.model.MainViewModel
 import com.example.elasegura.model.Route
-import com.example.elasegura.ui.splash.SplashScreen
+import com.example.elasegura.ui.contacts.ContactsScreen
+import com.example.elasegura.ui.perfil.PerfilScreen
 import com.example.elasegura.ui.splash.HomeScreen
+import com.example.elasegura.ui.splash.MapScreen
+import com.example.elasegura.ui.splash.SplashScreen
 
 @Composable
 fun NavGraph(
@@ -27,15 +30,35 @@ fun NavGraph(
                 viewModel = viewModel,
                 navController = navController,
                 bottomNavItems = listOf(
-                    BottomNavItem.PerfilButton,
+                    BottomNavItem.HomeButton,
                     BottomNavItem.MapaButton,
                     BottomNavItem.ContatosButton
                 )
             )
         }
 
-        composable(Route.Perfil.route) { /* Tela Perfil */ }
-        composable(Route.Map.route) { /* Tela Mapa */ }
-        composable(Route.Contatos.route) { /* Tela Contatos */ }
+        composable(Route.Perfil.route) {
+            PerfilScreen(navController) }
+
+        composable(Route.Mapa.route) {
+            MapScreen(
+                navController = navController,
+                currentAddress = viewModel.currentAddress.value,
+                onUpdateLocation = { viewModel.updateLocation() },
+                onShowPeopleAround = { /* lógica para mostrar pessoas */ }
+            )
+        }
+
+        composable(Route.Contatos.route) {
+            ContactsScreen(
+                navController = navController,
+                contacts = viewModel.contacts,
+                onAddContact = { navController.navigate("addContact") }
+            )
+        }
+
+        composable("addContact") {
+            // Tela para adicionar contato (pode ser simples para seu projeto)
+        }
     }
 }

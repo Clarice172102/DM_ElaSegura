@@ -6,8 +6,10 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,9 +24,11 @@ import androidx.compose.material.icons.outlined.Warning
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -44,6 +48,7 @@ import com.example.elasegura.ui.navigation.BottomNavItem
 import com.example.elasegura.ui.theme.ElaSeguraTheme
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.graphics.painter.Painter
+import com.example.elasegura.model.Route
 
 @Composable
 fun HomeScreen(
@@ -72,7 +77,7 @@ fun HomeScreen(
     Scaffold(
         bottomBar = {
             NavigationBar(
-                containerColor = Color(0xFFD8B8F8) // lilás conforme o layout
+                containerColor = Color(0xFFD8B8F8), // lilás conforme o layout
             ) {
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentRoute = navBackStackEntry?.destination?.route
@@ -95,7 +100,14 @@ fun HomeScreen(
                         },
                         label = {
                             Text(item.title, color = Color.Black)
-                        }
+                        },
+                        colors = NavigationBarItemDefaults.colors(
+                            indicatorColor = Color.Transparent,   // <- REMOVE O FUNDO ARREDONDADO
+                            selectedIconColor = Color(0xFF6A1B9A),
+                            selectedTextColor = Color.Black,
+                            unselectedIconColor = Color(0xFF6A1B9A),
+                            unselectedTextColor = Color.Black
+                        )
                     )
                 }
             }
@@ -109,16 +121,33 @@ fun HomeScreen(
                 .padding(horizontal = 24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.height(50.dp))
+            // TOPO (Logo + Perfil)
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 30.dp, start = 20.dp, end = 20.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically   // <- ISSO ALINHA OS DOIS!
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.logo_elasegura1),
+                    contentDescription = "Logo",
+                    modifier = Modifier.size(90.dp)
+                )
 
-            // LOGO
-            Image(
-                painter = painterResource(id = R.drawable.logo_elasegura1),
-                contentDescription = "Logo ElaSegura",
-                modifier = Modifier.size(170.dp)
-            )
+                IconButton(
+                    onClick = { navController.navigate(Route.Perfil.route) }
+                ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.user),
+                    contentDescription = "Perfil",
+                    modifier = Modifier.size(32.dp),
+                    tint = Color(0xFF4A148C)
+                )
+            }
+            }
 
-            Spacer(modifier = Modifier.height(90.dp))
+            Spacer(modifier = Modifier.height(120.dp))
 
             // BOTÃO 1 — PRECISO DE AJUDA
             Button(

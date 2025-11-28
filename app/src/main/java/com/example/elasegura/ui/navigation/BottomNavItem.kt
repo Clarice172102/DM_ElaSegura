@@ -14,7 +14,7 @@ sealed class BottomNavItem(
     val route: String,
     val iconRes: Int // o R.drawable.ic_x
 ) {
-    object PerfilButton : BottomNavItem("Perfil", "perfil", R.drawable.user)
+    object HomeButton : BottomNavItem("Home",  "home", R.drawable.home)
     object MapaButton : BottomNavItem("Mapa", "mapa", R.drawable.map)
     object ContatosButton : BottomNavItem("Contatos", "contatos", R.drawable.phone)
 }
