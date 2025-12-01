@@ -13,3 +13,10 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+# Ignorar cache Kotlin
+.kotlin/
+
+# Logs da JVM
+hs_err_pid*.log
+replay_pid*.log
