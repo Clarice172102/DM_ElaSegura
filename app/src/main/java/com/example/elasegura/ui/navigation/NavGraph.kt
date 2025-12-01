@@ -7,8 +7,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.elasegura.model.MainViewModel
 import com.example.elasegura.model.Route
-import com.example.elasegura.ui.contacts.ContactsScreen
+import com.example.elasegura.ui.splash.ContactsScreen
 import com.example.elasegura.ui.perfil.PerfilScreen
+import com.example.elasegura.ui.splash.AddContactScreen
 import com.example.elasegura.ui.splash.HomeScreen
 import com.example.elasegura.ui.splash.MapScreen
 import com.example.elasegura.ui.splash.SplashScreen
@@ -52,15 +53,14 @@ fun NavGraph(
         composable(Route.Contatos.route) {
             ContactsScreen(
                 navController = navController,
-                contacts = viewModel.contacts,
+                viewModel = viewModel,
                 onAddContact = { navController.navigate("addContact") }
             )
         }
 
         composable("addContact") {
-            // Tela para adicionar contato (pode ser simples para seu projeto)
+            AddContactScreen(navController = navController, viewModel = viewModel)
         }
     }
 }
-
 
