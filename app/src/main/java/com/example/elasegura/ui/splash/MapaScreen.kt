@@ -1,5 +1,6 @@
 package com.example.elasegura.ui.splash
 
+import android.content.pm.PackageManager
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
@@ -10,14 +11,26 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.elasegura.R
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.core.content.ContextCompat
+import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.MapProperties
+import com.google.maps.android.compose.MapUiSettings
+import com.google.maps.android.compose.rememberCameraPositionState
+import com.google.maps.android.compose.Marker
+
+
 
 @Composable
 fun MapScreen(
@@ -84,14 +97,49 @@ fun MapScreen(
         }
 
         Spacer(modifier = Modifier.height(16.dp))
+        // --- MAPA ---
+        val cameraPositionState = rememberCameraPositionState()
 
-        // Aqui vai o mapa, exemplo simulando com Box cinza
+// Verifica permissão
+        val context = LocalContext.current
+        val hasLocationPermission by remember {
+            mutableStateOf(
+                ContextCompat.checkSelfPermission(
+                    context,
+                    android.Manifest.permission.ACCESS_FINE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED
+            )
+        }
+
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
-                .background(Color.LightGray)
         ) {
+            GoogleMap(
+                modifier = Modifier.fillMaxSize(),
+                cameraPositionState = cameraPositionState,
+                properties = MapProperties(
+                    isMyLocationEnabled = hasLocationPermission
+                ),
+                uiSettings = MapUiSettings(
+                    myLocationButtonEnabled = true
+                )
+            ) {
+                // marcador exemplo
+                Marker(
+                    state = com.google.maps.android.compose.MarkerState(
+                        position = com.google.android.gms.maps.model.LatLng(-8.05, -34.9)
+                    ),
+                    title = "Recife"
+                )
+
+            }
+        }
+
+
+        // Aqui vai o mapa, exemplo simulando com Box cinza
+
             // Aqui você pode colocar o Google Map Compose
             // MapView ou GoogleMap composable (exemplo abaixo)
 
@@ -107,6 +155,6 @@ fun MapScreen(
                 )
             }
             */
-        }
+
     }
 }
