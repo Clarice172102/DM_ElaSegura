@@ -37,19 +37,16 @@ fun MapScreen(
     navController: NavHostController,
     currentAddress: String,
     onUpdateLocation: () -> Unit,
-    onShowPeopleAround: () -> Unit,
-    modifier: Modifier = Modifier
+    onShowPeopleAround: () -> Unit
 ) {
     Column(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFFF3E5F5))
             .padding(16.dp)
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
-        ) {
+
+        Row(verticalAlignment = Alignment.CenterVertically) {
             IconButton(onClick = { navController.navigate("home") }) {
                 Icon(
                     painter = painterResource(id = R.drawable.chevron_left),
@@ -57,23 +54,24 @@ fun MapScreen(
                     tint = Color(0xFF4A148C)
                 )
             }
-            Spacer(modifier = Modifier.width(8.dp))
+
             Text(
                 "Você está em:",
-                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                color = Color(0xFF4A148C)
+                color = Color(0xFF4A148C),
+                fontWeight = FontWeight.Bold,
+                style = MaterialTheme.typography.titleMedium
             )
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(4.dp))
 
         Text(
             text = currentAddress,
-            style = MaterialTheme.typography.bodyMedium,
-            color = Color(0xFF4A148C)
+            color = Color(0xFF4A148C),
+            style = MaterialTheme.typography.bodyMedium
         )
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
         Row(
             horizontalArrangement = Arrangement.spacedBy(16.dp),
@@ -81,7 +79,7 @@ fun MapScreen(
         ) {
             Button(
                 onClick = onUpdateLocation,
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFAA71D0)),
+                colors = ButtonDefaults.buttonColors(Color(0xFFAA71D0)),
                 modifier = Modifier.weight(1f)
             ) {
                 Text("Atualizar Localização", color = Color.White)
@@ -89,7 +87,7 @@ fun MapScreen(
 
             Button(
                 onClick = onShowPeopleAround,
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD8B8F8)),
+                colors = ButtonDefaults.buttonColors(Color(0xFFD8B8F8)),
                 modifier = Modifier.weight(1f)
             ) {
                 Text("Pessoas ao Redor", color = Color(0xFF4A148C))
@@ -111,11 +109,13 @@ fun MapScreen(
             )
         }
 
+
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
         ) {
+
             GoogleMap(
                 modifier = Modifier.fillMaxSize(),
                 cameraPositionState = cameraPositionState,
@@ -137,24 +137,6 @@ fun MapScreen(
             }
         }
 
-
-        // Aqui vai o mapa, exemplo simulando com Box cinza
-
-            // Aqui você pode colocar o Google Map Compose
-            // MapView ou GoogleMap composable (exemplo abaixo)
-
-            /*
-            GoogleMap(
-                modifier = Modifier.fillMaxSize(),
-                cameraPositionState = cameraPositionState,
-                // outros parâmetros
-            ) {
-                Marker(
-                    position = LatLng(...),
-                    title = "Você está aqui"
-                )
-            }
-            */
 
     }
 }
