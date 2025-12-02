@@ -1,6 +1,5 @@
-package com.example.elasegura.ui.perfil
+package com.example.elasegura.ui.splash
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -40,7 +39,6 @@ fun PerfilScreen(navController: NavHostController) {
     ) {
         Spacer(modifier = Modifier.height(35.dp))
 
-        // Topo - Voltar + Notificações
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -55,7 +53,7 @@ fun PerfilScreen(navController: NavHostController) {
                 )
             }
 
-            IconButton(onClick = { /* Ação de notificações */ }) {
+            IconButton(onClick = { }) {
                 Icon(
                     painter = painterResource(id = R.drawable.notifications),
                     contentDescription = "Notificações",
@@ -67,11 +65,10 @@ fun PerfilScreen(navController: NavHostController) {
 
         Spacer(modifier = Modifier.height(40.dp))
 
-        // Cards do menu
         MenuCard(
             iconRes = R.drawable.user,
             text = "Conta",
-            onClick = { /* Navegar para Conta */ }
+            onClick = {  }
         )
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -79,7 +76,7 @@ fun PerfilScreen(navController: NavHostController) {
         MenuCard(
             iconRes = R.drawable.message_square,
             text = "Compartilhar Localização para a comunidade",
-            onClick = { /* Ação */ }
+            onClick = { }
         )
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -87,7 +84,7 @@ fun PerfilScreen(navController: NavHostController) {
         MenuCard(
             iconRes = R.drawable.smartphone,
             text = "Dispositivos",
-            onClick = { /* Ação */ }
+            onClick = { }
         )
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -95,7 +92,7 @@ fun PerfilScreen(navController: NavHostController) {
         MenuCard(
             iconRes = R.drawable.settings,
             text = "Configurações",
-            onClick = { /* Ação */ }
+            onClick = { }
         )
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -103,12 +100,11 @@ fun PerfilScreen(navController: NavHostController) {
         MenuCard(
             iconRes = R.drawable.log_out,
             text = "Sair",
-            onClick = { /* Logout */ }
+            onClick = {  }
         )
 
         Spacer(modifier = Modifier.weight(1f))
 
-        // Rodapé
         Text(
             text = "Todos os direitos reservados",
             modifier = Modifier

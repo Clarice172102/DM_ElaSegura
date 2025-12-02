@@ -11,7 +11,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavController
 import com.example.elasegura.R
 import com.example.elasegura.model.MainViewModel
-import com.example.elasegura.model.Route
+import com.example.elasegura.ui.navigation.Route
 
 
 @Composable

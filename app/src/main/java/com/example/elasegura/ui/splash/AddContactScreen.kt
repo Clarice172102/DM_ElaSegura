@@ -56,7 +56,6 @@ fun AddContactScreen(
             .padding(16.dp)
     ) {
 
-        // 🔙 Voltar
         Row(verticalAlignment = Alignment.CenterVertically) {
             IconButton(onClick = { navController.popBackStack() }) {
                 Icon(
@@ -69,7 +68,6 @@ fun AddContactScreen(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        // ⭐ Botões superiores
         Row(
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier.fillMaxWidth()
@@ -93,7 +91,6 @@ fun AddContactScreen(
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        // 🔤 Título
         Text(
             "Novo Contato",
             color = Color(0xFF4A148C),
@@ -111,7 +108,6 @@ fun AddContactScreen(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // 🟣 Nome
         Text("Nome do Contato", color = Color(0xFF4A148C), fontWeight = FontWeight.SemiBold)
         Spacer(modifier = Modifier.height(4.dp))
 
@@ -129,13 +125,17 @@ fun AddContactScreen(
             modifier = Modifier.fillMaxWidth(),
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = Color(0xFFAA71D0),
-                unfocusedBorderColor = Color(0xFFAA71D0)
+                unfocusedBorderColor = Color(0xFFAA71D0),
+                cursorColor = Color.Black,
+                focusedTextColor = Color.Black,
+                unfocusedTextColor = Color.Black,
+                focusedPlaceholderColor = Color.Gray,
+                unfocusedPlaceholderColor = Color.Gray
             )
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // 🟣 Número
         Text("Número do Contato", color = Color(0xFF4A148C), fontWeight = FontWeight.SemiBold)
         Spacer(modifier = Modifier.height(4.dp))
 
@@ -153,13 +153,17 @@ fun AddContactScreen(
             modifier = Modifier.fillMaxWidth(),
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = Color(0xFFAA71D0),
-                unfocusedBorderColor = Color(0xFFAA71D0)
+                unfocusedBorderColor = Color(0xFFAA71D0),
+                cursorColor = Color.Black,
+                focusedTextColor = Color.Black,
+                unfocusedTextColor = Color.Black,
+                focusedPlaceholderColor = Color.Gray,
+                unfocusedPlaceholderColor = Color.Gray
             )
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // 🟣 Dropdown de vínculo
         Text("Vínculo", color = Color(0xFF4A148C), fontWeight = FontWeight.SemiBold)
         Spacer(modifier = Modifier.height(4.dp))
 
@@ -204,11 +208,10 @@ fun AddContactScreen(
 
         Spacer(modifier = Modifier.height(30.dp))
 
-        // 🟠 BOTÃO LARANJA
         Button(
             onClick = {
-                if (name.isNotEmpty() && phone.isNotEmpty()) {
-                    viewModel.addContact(Contact(name, phone))
+                if (name.isNotEmpty() && phone.isNotEmpty() && vinculo.isNotEmpty()) {
+                    viewModel.addContact(Contact(name, phone, vinculo))
                     navController.popBackStack()
                 }
             },

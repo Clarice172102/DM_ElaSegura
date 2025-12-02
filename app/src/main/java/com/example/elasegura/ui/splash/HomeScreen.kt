@@ -1,13 +1,8 @@
 package com.example.elasegura.ui.splash
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -18,14 +13,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Check
-import androidx.compose.material.icons.outlined.Warning
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
@@ -45,10 +36,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.elasegura.R
 import com.example.elasegura.model.MainViewModel
 import com.example.elasegura.ui.navigation.BottomNavItem
-import com.example.elasegura.ui.theme.ElaSeguraTheme
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.graphics.painter.Painter
-import com.example.elasegura.model.Route
+import com.example.elasegura.ui.navigation.Route
 
 @Composable
 fun HomeScreen(
@@ -77,7 +65,7 @@ fun HomeScreen(
     Scaffold(
         bottomBar = {
             NavigationBar(
-                containerColor = Color(0xFFD8B8F8), // lilás conforme o layout
+                containerColor = Color(0xFFD8B8F8),
             ) {
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentRoute = navBackStackEntry?.destination?.route
@@ -102,7 +90,7 @@ fun HomeScreen(
                             Text(item.title, color = Color.Black)
                         },
                         colors = NavigationBarItemDefaults.colors(
-                            indicatorColor = Color.Transparent,   // <- REMOVE O FUNDO ARREDONDADO
+                            indicatorColor = Color.Transparent,
                             selectedIconColor = Color(0xFF6A1B9A),
                             selectedTextColor = Color.Black,
                             unselectedIconColor = Color(0xFF6A1B9A),
@@ -121,13 +109,12 @@ fun HomeScreen(
                 .padding(horizontal = 24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // TOPO (Logo + Perfil)
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 30.dp, start = 20.dp, end = 20.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically   // <- ISSO ALINHA OS DOIS!
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.logo_elasegura1),
@@ -149,7 +136,6 @@ fun HomeScreen(
 
             Spacer(modifier = Modifier.height(120.dp))
 
-            // BOTÃO 1 — PRECISO DE AJUDA
             Button(
                 onClick = onPrecisoAjuda,
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFE53935)),
@@ -170,7 +156,6 @@ fun HomeScreen(
 
             Spacer(modifier = Modifier.height(30.dp))
 
-            // BOTÃO 2 — ME SINTO AMEAÇADA
             Button(
                 onClick = onAmeacada,
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFEB3B)),
@@ -191,7 +176,6 @@ fun HomeScreen(
 
             Spacer(modifier = Modifier.height(30.dp))
 
-            // BOTÃO 3 — ESTOU BEM
             Button(
                 onClick = onEstouBem,
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1E88E5)),

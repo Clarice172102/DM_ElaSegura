@@ -20,12 +20,13 @@ import androidx.navigation.NavHostController
 import com.example.elasegura.R
 import com.example.elasegura.model.Contact
 import com.example.elasegura.model.MainViewModel
+import com.example.elasegura.ui.navigation.Route
 
 @Composable
 fun ContactsScreen(
     navController: NavHostController,
     viewModel: MainViewModel,
-    onAddContact: () -> Unit = { navController.navigate("addContact") }
+    onAddContact: () -> Unit = { navController.navigate(Route.AddContact.route) }
 
 ) {
     val contacts = viewModel.contacts
@@ -49,13 +50,12 @@ fun ContactsScreen(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        // ⭐ Botões de abas: Meus Contatos | Adicionar
         Row(
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
             Button(
-                onClick = { /* já está nessa tela */ },
+                onClick = { },
                 colors = ButtonDefaults.buttonColors(Color(0xFFAA71D0)),
                 modifier = Modifier.weight(1f)
             ) {
@@ -122,6 +122,11 @@ fun ContactCard(contact: Contact, onClick: () -> Unit) {
                 Text(
                     text = contact.phone,
                     color = Color(0xFF4A148C)
+                )
+                Text(
+                    text = contact.vinculo,
+                    color = Color(0xFF4A148C),
+                    fontWeight = FontWeight.SemiBold
                 )
             }
         }

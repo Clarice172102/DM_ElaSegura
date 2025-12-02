@@ -9,7 +9,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -29,7 +28,6 @@ import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.google.maps.android.compose.Marker
-
 
 
 @Composable
@@ -95,10 +93,10 @@ fun MapScreen(
         }
 
         Spacer(modifier = Modifier.height(16.dp))
-        // --- MAPA ---
+
+        //Mapa
         val cameraPositionState = rememberCameraPositionState()
 
-// Verifica permissão
         val context = LocalContext.current
         val hasLocationPermission by remember {
             mutableStateOf(
@@ -126,17 +124,15 @@ fun MapScreen(
                     myLocationButtonEnabled = true
                 )
             ) {
-                // marcador exemplo
+
                 Marker(
                     state = com.google.maps.android.compose.MarkerState(
-                        position = com.google.android.gms.maps.model.LatLng(-8.05, -34.9)
+                        position = com.google.android.gms.maps.model.LatLng(-8.058747557166468, -34.949197888223125)
                     ),
                     title = "Recife"
                 )
 
             }
         }
-
-
     }
 }

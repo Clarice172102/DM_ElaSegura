@@ -6,12 +6,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.elasegura.model.MainViewModel
-import com.example.elasegura.model.Route
-import com.example.elasegura.ui.splash.ContactsScreen
-import com.example.elasegura.ui.perfil.PerfilScreen
+import com.example.elasegura.ui.navigation.Route
 import com.example.elasegura.ui.splash.AddContactScreen
+import com.example.elasegura.ui.splash.ContactsScreen
 import com.example.elasegura.ui.splash.HomeScreen
 import com.example.elasegura.ui.splash.MapScreen
+import com.example.elasegura.ui.splash.PerfilScreen
 import com.example.elasegura.ui.splash.SplashScreen
 
 @Composable
@@ -58,9 +58,23 @@ fun NavGraph(
             )
         }
 
-        composable("addContact") {
+        composable(Route.AddContact.route) {
             AddContactScreen(navController = navController, viewModel = viewModel)
         }
+        /*
+        composable(Route.Login.route) {
+            LoginScreen(
+                onLogin = { },
+                onCreateAccountClick = { navController.navigate(Route.Register.route) },
+                onHelpClick = {  }
+            )
+        }
+
+        composable(Route.Register.route) {
+            RegisterScreen(
+                onCreateAccount = { },
+                onLoginClick = { navController.navigate(Route.Login.route) }
+            )
+        }*/
     }
 }
-
