@@ -8,7 +8,7 @@ sealed class Route(val route: String) {
     object Mapa : Route("mapa")
     object Contatos : Route("contatos")
     object AddContact : Route("addContact")
-    /*object Login : Route("login")
-    object Register : Route("register")*/
 
+    object Register : Route("register")
+    object Login : Route("login")
 }

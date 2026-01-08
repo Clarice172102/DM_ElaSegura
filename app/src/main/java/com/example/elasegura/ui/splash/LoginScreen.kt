@@ -1,4 +1,4 @@
-/*package com.example.elasegura.ui.splash
+package com.example.elasegura.ui.splash
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -193,4 +193,4 @@ fun LoginScreen(
             modifier = Modifier.clickable { onHelpClick() }
         )
     }
-}*/
+}

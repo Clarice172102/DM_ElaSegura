@@ -6,13 +6,14 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.elasegura.model.MainViewModel
-import com.example.elasegura.ui.navigation.Route
 import com.example.elasegura.ui.splash.AddContactScreen
 import com.example.elasegura.ui.splash.ContactsScreen
 import com.example.elasegura.ui.splash.HomeScreen
+import com.example.elasegura.ui.splash.LoginScreen
 import com.example.elasegura.ui.splash.MapScreen
 import com.example.elasegura.ui.splash.PerfilScreen
 import com.example.elasegura.ui.splash.SplashScreen
+import com.example.elasegura.ui.splash.RegisterScreen
 
 @Composable
 fun NavGraph(
@@ -61,10 +62,14 @@ fun NavGraph(
         composable(Route.AddContact.route) {
             AddContactScreen(navController = navController, viewModel = viewModel)
         }
-        /*
+
         composable(Route.Login.route) {
             LoginScreen(
-                onLogin = { },
+                onLogin = {
+                    navController.navigate(Route.Home.route) {
+                        popUpTo(Route.Login.route) { inclusive = true }
+                    }
+                },
                 onCreateAccountClick = { navController.navigate(Route.Register.route) },
                 onHelpClick = {  }
             )
@@ -72,9 +77,13 @@ fun NavGraph(
 
         composable(Route.Register.route) {
             RegisterScreen(
-                onCreateAccount = { },
+                onCreateAccount = {
+                    navController.navigate(Route.Home.route) {
+                        popUpTo(Route.Register.route) { inclusive = true }
+                    }
+                },
                 onLoginClick = { navController.navigate(Route.Login.route) }
             )
-        }*/
+        }
     }
 }
