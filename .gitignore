@@ -20,3 +20,6 @@ local.properties
 # Logs da JVM
 hs_err_pid*.log
 replay_pid*.log
+
+# Firebase config
+google-services.json
