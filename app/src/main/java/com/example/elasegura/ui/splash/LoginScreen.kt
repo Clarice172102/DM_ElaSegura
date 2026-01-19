@@ -1,5 +1,6 @@
 package com.example.elasegura.ui.splash
 
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -20,24 +21,37 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.elasegura.R
+import com.example.elasegura.ui.navigation.Route
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun LoginScreen(
-    onLogin: () -> Unit,
+    navController: NavController,
+    onHelpClick: () -> Unit,
     onCreateAccountClick: () -> Unit,
-    onHelpClick: () -> Unit
 ) {
+    val context = LocalContext.current
+
+    var email by remember { mutableStateOf("") }
+    var senha by remember { mutableStateOf("") }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -89,8 +103,8 @@ fun LoginScreen(
         ) {
             // Email
             OutlinedTextField(
-                value = "",
-                onValueChange = {},
+                value = email,
+                onValueChange = { email = it },
                 label = { Text("Email", color = Color(0xFF6C3EA9)) },
                 placeholder = { Text("Ex: ElaSegura@gmail.com") },
                 leadingIcon = {
@@ -117,8 +131,8 @@ fun LoginScreen(
 
             // Senha
             OutlinedTextField(
-                value = "",
-                onValueChange = {},
+                value = senha,
+                onValueChange = { senha = it },
                 label = { Text("Senha", color = Color(0xFF6C3EA9)) },
                 placeholder = { Text(".......") },
                 leadingIcon = {
@@ -138,8 +152,7 @@ fun LoginScreen(
                     unfocusedPlaceholderColor = Color.Gray
                 ),
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(50),
-                visualTransformation = PasswordVisualTransformation()
+                shape = RoundedCornerShape(50)
             )
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -157,7 +170,24 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(24.dp))
 
             Button(
-                onClick = onLogin,
+                onClick = {
+                    FirebaseAuth.getInstance()
+                        .signInWithEmailAndPassword(email, senha)
+                        .addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                Toast.makeText(context, "Login OK!", Toast.LENGTH_LONG).show()
+                                navController.navigate(Route.Home.route) {
+                                    popUpTo(Route.Login.route) { inclusive = true }
+                                }
+                            } else {
+                                Toast.makeText(
+                                    context,
+                                    "Login FALHOU!",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
+                        }
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp),

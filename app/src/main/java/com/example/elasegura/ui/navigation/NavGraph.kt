@@ -24,7 +24,7 @@ fun NavGraph(
     NavHost(navController = navController, startDestination = Route.Splash.route) {
 
         composable(Route.Splash.route) {
-            SplashScreen(navController = navController, viewModel = viewModel, modifier = modifier)
+            SplashScreen(navController = navController)
         }
 
         composable(Route.Home.route) {
@@ -36,6 +36,27 @@ fun NavGraph(
                     BottomNavItem.MapaButton,
                     BottomNavItem.ContatosButton
                 )
+            )
+        }
+
+        composable(Route.Login.route) {
+            LoginScreen(
+                navController = navController, // <-- aqui
+                onCreateAccountClick = {
+                    navController.navigate(Route.Register.route)
+                },
+                onHelpClick = { }
+            )
+        }
+
+        composable(Route.Register.route) {
+            RegisterScreen(
+                onCreateAccount = {
+                    navController.navigate(Route.Home.route) {
+                        popUpTo(Route.Register.route) { inclusive = true }
+                    }
+                },
+                onLoginClick = { navController.navigate(Route.Login.route) }
             )
         }
 
@@ -63,27 +84,5 @@ fun NavGraph(
             AddContactScreen(navController = navController, viewModel = viewModel)
         }
 
-        composable(Route.Login.route) {
-            LoginScreen(
-                onLogin = {
-                    navController.navigate(Route.Home.route) {
-                        popUpTo(Route.Login.route) { inclusive = true }
-                    }
-                },
-                onCreateAccountClick = { navController.navigate(Route.Register.route) },
-                onHelpClick = {  }
-            )
-        }
-
-        composable(Route.Register.route) {
-            RegisterScreen(
-                onCreateAccount = {
-                    navController.navigate(Route.Home.route) {
-                        popUpTo(Route.Register.route) { inclusive = true }
-                    }
-                },
-                onLoginClick = { navController.navigate(Route.Login.route) }
-            )
-        }
     }
 }

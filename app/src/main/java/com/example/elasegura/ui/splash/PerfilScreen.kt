@@ -19,6 +19,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.elasegura.R
+import com.example.elasegura.ui.navigation.Route
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun PerfilScreen(navController: NavHostController) {
@@ -100,7 +102,12 @@ fun PerfilScreen(navController: NavHostController) {
         MenuCard(
             iconRes = R.drawable.log_out,
             text = "Sair",
-            onClick = {  }
+            {
+                FirebaseAuth.getInstance().signOut()
+                navController.navigate(Route.Login.route) {
+                    popUpTo(Route.Home.route) { inclusive = true } // remove Home da pilha
+                }
+            }
         )
 
         Spacer(modifier = Modifier.weight(1f))

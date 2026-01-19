@@ -10,20 +10,29 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavController
 import com.example.elasegura.R
-import com.example.elasegura.model.MainViewModel
 import com.example.elasegura.ui.navigation.Route
+import com.google.firebase.auth.FirebaseAuth
 
 
 @Composable
 fun SplashScreen(
     navController: NavController,
-    viewModel: MainViewModel,
     modifier: Modifier = Modifier
 ) {
+    val auth = FirebaseAuth.getInstance()
+
     LaunchedEffect(Unit) {
         kotlinx.coroutines.delay(1500)
-        navController.navigate(Route.Login.route) {
-            popUpTo(Route.Splash.route) { inclusive = true }
+        if (auth.currentUser != null) {
+            // Usuário logado → Home
+            navController.navigate(Route.Home.route) {
+                popUpTo(Route.Splash.route) { inclusive = true }
+            }
+        } else {
+            // Usuário NÃO logado → Login
+            navController.navigate(Route.Login.route) {
+                popUpTo(Route.Splash.route) { inclusive = true }
+            }
         }
     }
 
