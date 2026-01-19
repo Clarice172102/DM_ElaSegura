@@ -23,3 +23,5 @@ replay_pid*.log
 
 # Firebase config
 google-services.json
+
+.idea/
