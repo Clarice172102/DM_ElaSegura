@@ -23,4 +23,3 @@ class MainViewModel : ViewModel() {
         _contacts.add(contact)
     }
 }
-
