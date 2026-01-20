@@ -75,6 +75,9 @@ fun HomeScreen(
                         selected = currentRoute == item.route,
                         onClick = {
                             navController.navigate(item.route) {
+                                popUpTo(Route.Home.route) {
+                                    saveState = true
+                                }
                                 launchSingleTop = true
                                 restoreState = true
                             }
