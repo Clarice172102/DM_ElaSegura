@@ -28,12 +28,18 @@ import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.google.maps.android.compose.Marker
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.runtime.LaunchedEffect
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.model.LatLng
 
 
 @Composable
 fun MapScreen(
     navController: NavHostController,
     currentAddress: String,
+    currentLatLng: LatLng?,
     onUpdateLocation: () -> Unit,
     onShowPeopleAround: () -> Unit
 ) {
@@ -97,8 +103,24 @@ fun MapScreen(
         //Mapa
         val cameraPositionState = rememberCameraPositionState()
 
+        LaunchedEffect(currentLatLng) {
+            currentLatLng?.let { latLng ->
+                cameraPositionState.animate(
+                    update = CameraUpdateFactory.newLatLngZoom(
+                        latLng,
+                        16f // zoom estilo Google Maps
+                    ),
+                    durationMs = 1000
+                )
+            }
+        }
+
+        LaunchedEffect(currentAddress) {
+            // sempre que o endereço mudar, move a câmera
+        }
+
         val context = LocalContext.current
-        val hasLocationPermission by remember {
+        val hasLocationPermission = remember {
             mutableStateOf(
                 ContextCompat.checkSelfPermission(
                     context,
@@ -107,6 +129,25 @@ fun MapScreen(
             )
         }
 
+        val permissionLauncher =
+            rememberLauncherForActivityResult(
+                ActivityResultContracts.RequestPermission()
+            ) { granted ->
+                hasLocationPermission.value = granted
+                if (granted) {
+                    onUpdateLocation()
+                }
+            }
+
+        LaunchedEffect(Unit) {
+            if (!hasLocationPermission.value) {
+                permissionLauncher.launch(
+                    android.Manifest.permission.ACCESS_FINE_LOCATION
+                )
+            } else {
+                onUpdateLocation()
+            }
+        }
 
         Box(
             modifier = Modifier
@@ -118,19 +159,19 @@ fun MapScreen(
                 modifier = Modifier.fillMaxSize(),
                 cameraPositionState = cameraPositionState,
                 properties = MapProperties(
-                    isMyLocationEnabled = hasLocationPermission
+                    isMyLocationEnabled = hasLocationPermission.value
                 ),
                 uiSettings = MapUiSettings(
                     myLocationButtonEnabled = true
                 )
             ) {
-
+                /*
                 Marker(
                     state = com.google.maps.android.compose.MarkerState(
                         position = com.google.android.gms.maps.model.LatLng(-8.058747557166468, -34.949197888223125)
                     ),
                     title = "Recife"
-                )
+                )*/
 
             }
         }

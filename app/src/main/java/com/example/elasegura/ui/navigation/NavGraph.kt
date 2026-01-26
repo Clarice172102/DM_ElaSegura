@@ -67,8 +67,9 @@ fun NavGraph(
             MapScreen(
                 navController = navController,
                 currentAddress = viewModel.currentAddress.value,
+                currentLatLng = viewModel.currentLatLng.value,
                 onUpdateLocation = { viewModel.updateLocation() },
-                onShowPeopleAround = { /* lógica para mostrar pessoas */ }
+                onShowPeopleAround = { /* futuro */ }
             )
         }
 

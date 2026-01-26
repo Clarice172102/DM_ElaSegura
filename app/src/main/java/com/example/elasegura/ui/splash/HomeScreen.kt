@@ -29,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -37,6 +38,11 @@ import com.example.elasegura.R
 import com.example.elasegura.model.MainViewModel
 import com.example.elasegura.ui.navigation.BottomNavItem
 import com.example.elasegura.ui.navigation.Route
+import android.content.Intent
+import android.net.Uri
+import android.widget.Toast
+import androidx.compose.ui.platform.LocalContext
+
 
 @Composable
 fun HomeScreen(
@@ -48,6 +54,7 @@ fun HomeScreen(
     onAmeacada: () -> Unit = {},
     onEstouBem: () -> Unit = {}
 ) {
+    val context = LocalContext.current
     // Gradiente de fundo
     val gradient = Brush.verticalGradient(
         colors = listOf(
@@ -137,10 +144,28 @@ fun HomeScreen(
             }
             }
 
+            Text(
+                text = "Bem-vinda, ${viewModel.user?.name ?: "..." }",
+                fontWeight = FontWeight.Bold,
+                color = Color(0xFF4A148C)
+            )
+
             Spacer(modifier = Modifier.height(120.dp))
 
             Button(
-                onClick = onPrecisoAjuda,
+                onClick = {
+                    val message = viewModel.getEmergencyMessage()
+
+                    if (message == null) {
+                        Toast.makeText(
+                            context,
+                            "Localização ainda não disponível",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } else {
+                        openWhatsAppChooser(context, message)
+                    }
+                },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFE53935)),
                 shape = RoundedCornerShape(12.dp),
                 modifier = Modifier
@@ -160,7 +185,19 @@ fun HomeScreen(
             Spacer(modifier = Modifier.height(30.dp))
 
             Button(
-                onClick = onAmeacada,
+                onClick = {
+                    val message = viewModel.getThreatenedMessage()
+
+                    if (message == null) {
+                        Toast.makeText(
+                            context,
+                            "Localização ainda não disponível",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } else {
+                        openWhatsAppChooser(context, message)
+                    }
+                },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFEB3B)),
                 shape = RoundedCornerShape(12.dp),
                 modifier = Modifier
@@ -180,7 +217,19 @@ fun HomeScreen(
             Spacer(modifier = Modifier.height(30.dp))
 
             Button(
-                onClick = onEstouBem,
+                onClick = {
+                    val message = viewModel.getImFineMessage()
+
+                    if (message == null) {
+                        Toast.makeText(
+                            context,
+                            "Localização ainda não disponível",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } else {
+                        openWhatsAppChooser(context, message)
+                    }
+                },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1E88E5)),
                 shape = RoundedCornerShape(12.dp),
                 modifier = Modifier
@@ -197,5 +246,26 @@ fun HomeScreen(
                 Text("Estou Bem", fontSize = 18.sp, color = Color.Black)
             }
         }
+    }
+}
+
+fun openWhatsAppChooser(
+    context: android.content.Context,
+    message: String
+) {
+    // Intent genérica para compartilhar texto
+    val sendIntent = Intent().apply {
+        action = Intent.ACTION_SEND
+        putExtra(Intent.EXTRA_TEXT, message)
+        type = "text/plain"
+    }
+
+    // Mostrar todos apps que podem receber texto (WhatsApp normal e Business, Telegram etc)
+    val chooser = Intent.createChooser(sendIntent, "Compartilhar via")
+
+    try {
+        context.startActivity(chooser)
+    } catch (e: Exception) {
+        Toast.makeText(context, "Nenhum aplicativo disponível", Toast.LENGTH_SHORT).show()
     }
 }

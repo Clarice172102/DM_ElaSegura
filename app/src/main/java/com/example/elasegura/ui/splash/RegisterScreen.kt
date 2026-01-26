@@ -35,6 +35,9 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.elasegura.R
+import com.example.elasegura.db.fb.FBDatabase
+import com.example.elasegura.db.fb.toFBUser
+import com.example.elasegura.model.User
 import com.google.firebase.auth.FirebaseAuth
 
 @Composable
@@ -223,8 +226,7 @@ fun RegisterScreen(
                     unfocusedPlaceholderColor = Color.Gray
                 ),
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(50),
-                visualTransformation = PasswordVisualTransformation()
+                shape = RoundedCornerShape(50)
             )
 
             Spacer(modifier = Modifier.height(20.dp))
@@ -235,6 +237,9 @@ fun RegisterScreen(
                         .createUserWithEmailAndPassword(email, senha)
                         .addOnCompleteListener { task ->
                             if (task.isSuccessful) {
+                                FBDatabase().register(
+                                    User(nome, email).toFBUser()
+                                )
                                 Toast.makeText(context, "Registro OK!", Toast.LENGTH_LONG).show()
                                 onCreateAccount() // navega para Home
                             } else {
