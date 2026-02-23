@@ -39,10 +39,16 @@ import com.example.elasegura.model.MainViewModel
 import com.example.elasegura.ui.navigation.BottomNavItem
 import com.example.elasegura.ui.navigation.Route
 import android.content.Intent
-import android.net.Uri
+import android.content.pm.PackageManager
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
-
+import androidx.core.content.ContextCompat
 
 @Composable
 fun HomeScreen(
@@ -55,6 +61,53 @@ fun HomeScreen(
     onEstouBem: () -> Unit = {}
 ) {
     val context = LocalContext.current
+
+    val workManager = androidx.work.WorkManager.getInstance(context)
+
+    fun triggerNotification(buttonType: String) {
+
+        val data = androidx.work.workDataOf(
+            com.example.elasegura.monitor.EmergencyWorker.KEY_BUTTON_TYPE to buttonType
+        )
+
+        val request =
+            androidx.work.OneTimeWorkRequestBuilder<
+                    com.example.elasegura.monitor.EmergencyWorker>()
+                .setInputData(data)
+                .build()
+
+        workManager.enqueue(request)
+    }
+
+    var hasLocationPermission by remember {
+        mutableStateOf(
+            ContextCompat.checkSelfPermission(
+                context,
+                android.Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        )
+    }
+
+    val permissionLauncher =
+        rememberLauncherForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { granted ->
+            hasLocationPermission = granted
+            if (granted) {
+                viewModel.updateLocation(hasLocationPermission)
+            }
+        }
+
+    LaunchedEffect(Unit) {
+        if (!hasLocationPermission) {
+            permissionLauncher.launch(
+                android.Manifest.permission.ACCESS_FINE_LOCATION
+            )
+        } else {
+            viewModel.updateLocation(hasLocationPermission)
+        }
+    }
+
     // Gradiente de fundo
     val gradient = Brush.verticalGradient(
         colors = listOf(
@@ -69,6 +122,7 @@ fun HomeScreen(
         endY = 1200f
     )
 
+
     Scaffold(
         bottomBar = {
             NavigationBar(
@@ -76,6 +130,7 @@ fun HomeScreen(
             ) {
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentRoute = navBackStackEntry?.destination?.route
+
 
                 bottomNavItems.forEach { item ->
                     NavigationBarItem(
@@ -132,17 +187,19 @@ fun HomeScreen(
                     modifier = Modifier.size(90.dp)
                 )
 
+
                 IconButton(
                     onClick = { navController.navigate(Route.Perfil.route) }
                 ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.user),
-                    contentDescription = "Perfil",
-                    modifier = Modifier.size(32.dp),
-                    tint = Color(0xFF4A148C)
-                )
+                    Icon(
+                        painter = painterResource(id = R.drawable.user),
+                        contentDescription = "Perfil",
+                        modifier = Modifier.size(32.dp),
+                        tint = Color(0xFF4A148C)
+                    )
+                }
             }
-            }
+
 
             Text(
                 text = "Bem-vinda, ${viewModel.user?.name ?: "..." }",
@@ -150,10 +207,14 @@ fun HomeScreen(
                 color = Color(0xFF4A148C)
             )
 
+
             Spacer(modifier = Modifier.height(120.dp))
+
 
             Button(
                 onClick = {
+                    triggerNotification("HELP")
+
                     val message = viewModel.getEmergencyMessage()
 
                     if (message == null) {
@@ -182,10 +243,14 @@ fun HomeScreen(
                 Text("Preciso de Ajuda", fontSize = 18.sp, color = Color.Black)
             }
 
+
             Spacer(modifier = Modifier.height(30.dp))
+
 
             Button(
                 onClick = {
+                    triggerNotification("DANGER")
+
                     val message = viewModel.getThreatenedMessage()
 
                     if (message == null) {
@@ -214,10 +279,14 @@ fun HomeScreen(
                 Text("Me sinto Ameaçada", fontSize = 18.sp, color = Color.Black)
             }
 
+
             Spacer(modifier = Modifier.height(30.dp))
+
 
             Button(
                 onClick = {
+                    triggerNotification("FINE")
+
                     val message = viewModel.getImFineMessage()
 
                     if (message == null) {
@@ -249,19 +318,22 @@ fun HomeScreen(
     }
 }
 
+
 fun openWhatsAppChooser(
     context: android.content.Context,
     message: String
 ) {
-    // Intent genérica para compartilhar texto
+    //Intent genérica para compartilhar texto
     val sendIntent = Intent().apply {
         action = Intent.ACTION_SEND
         putExtra(Intent.EXTRA_TEXT, message)
         type = "text/plain"
     }
 
-    // Mostrar todos apps que podem receber texto (WhatsApp normal e Business, Telegram etc)
+
+    //Mostrar todos apps que podem receber texto (WhatsApp normal e Business, Telegram etc)
     val chooser = Intent.createChooser(sendIntent, "Compartilhar via")
+
 
     try {
         context.startActivity(chooser)

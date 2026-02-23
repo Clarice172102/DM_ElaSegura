@@ -18,7 +18,6 @@ import com.example.elasegura.ui.splash.RegisterScreen
 @Composable
 fun NavGraph(
     navController: NavHostController,
-    modifier: Modifier = Modifier,
     viewModel: MainViewModel
 ) {
     NavHost(navController = navController, startDestination = Route.Splash.route) {
@@ -68,8 +67,10 @@ fun NavGraph(
                 navController = navController,
                 currentAddress = viewModel.currentAddress.value,
                 currentLatLng = viewModel.currentLatLng.value,
-                onUpdateLocation = { viewModel.updateLocation() },
-                onShowPeopleAround = { /* futuro */ }
+                onUpdateLocation = {
+                    viewModel.updateLocation(true)
+                },
+                onShowPeopleAround = { }
             )
         }
 

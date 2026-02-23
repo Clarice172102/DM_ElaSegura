@@ -10,27 +10,21 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.elasegura.R
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.core.content.ContextCompat
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.rememberCameraPositionState
-import com.google.maps.android.compose.Marker
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.ContextCompat
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.LatLng
 
@@ -43,6 +37,15 @@ fun MapScreen(
     onUpdateLocation: () -> Unit,
     onShowPeopleAround: () -> Unit
 ) {
+
+    val context = LocalContext.current
+
+    val hasPermission =
+        ContextCompat.checkSelfPermission(
+            context,
+            android.Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -119,36 +122,6 @@ fun MapScreen(
             // sempre que o endereço mudar, move a câmera
         }
 
-        val context = LocalContext.current
-        val hasLocationPermission = remember {
-            mutableStateOf(
-                ContextCompat.checkSelfPermission(
-                    context,
-                    android.Manifest.permission.ACCESS_FINE_LOCATION
-                ) == PackageManager.PERMISSION_GRANTED
-            )
-        }
-
-        val permissionLauncher =
-            rememberLauncherForActivityResult(
-                ActivityResultContracts.RequestPermission()
-            ) { granted ->
-                hasLocationPermission.value = granted
-                if (granted) {
-                    onUpdateLocation()
-                }
-            }
-
-        LaunchedEffect(Unit) {
-            if (!hasLocationPermission.value) {
-                permissionLauncher.launch(
-                    android.Manifest.permission.ACCESS_FINE_LOCATION
-                )
-            } else {
-                onUpdateLocation()
-            }
-        }
-
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -159,19 +132,12 @@ fun MapScreen(
                 modifier = Modifier.fillMaxSize(),
                 cameraPositionState = cameraPositionState,
                 properties = MapProperties(
-                    isMyLocationEnabled = hasLocationPermission.value
+                    isMyLocationEnabled = hasPermission
                 ),
                 uiSettings = MapUiSettings(
-                    myLocationButtonEnabled = true
+                    myLocationButtonEnabled = hasPermission
                 )
             ) {
-                /*
-                Marker(
-                    state = com.google.maps.android.compose.MarkerState(
-                        position = com.google.android.gms.maps.model.LatLng(-8.058747557166468, -34.949197888223125)
-                    ),
-                    title = "Recife"
-                )*/
 
             }
         }
