@@ -43,12 +43,21 @@ import android.content.pm.PackageManager
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.Box
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.window.Dialog
 import androidx.core.content.ContextCompat
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun HomeScreen(
@@ -122,8 +131,12 @@ fun HomeScreen(
         endY = 1200f
     )
 
+    val snackbarHostState = remember { SnackbarHostState() }
+    val coroutineScope = rememberCoroutineScope()
+    var showPopup by remember { mutableStateOf(false) }
 
     Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         bottomBar = {
             NavigationBar(
                 containerColor = Color(0xFFD8B8F8),
@@ -217,6 +230,8 @@ fun HomeScreen(
 
                     val message = viewModel.getEmergencyMessage()
 
+                    showPopup = true
+
                     if (message == null) {
                         Toast.makeText(
                             context,
@@ -252,6 +267,8 @@ fun HomeScreen(
                     triggerNotification("DANGER")
 
                     val message = viewModel.getThreatenedMessage()
+
+                    showPopup = true
 
                     if (message == null) {
                         Toast.makeText(
@@ -289,6 +306,8 @@ fun HomeScreen(
 
                     val message = viewModel.getImFineMessage()
 
+                    showPopup = true
+
                     if (message == null) {
                         Toast.makeText(
                             context,
@@ -316,6 +335,31 @@ fun HomeScreen(
             }
         }
     }
+
+    if (showPopup) {
+
+        LaunchedEffect(Unit) {
+            delay(1000)
+            showPopup = false
+        }
+
+        Dialog(onDismissRequest = { }) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(32.dp)
+                    .background(Color.Magenta, shape = RoundedCornerShape(16.dp))
+                    .padding(20.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "Sua localização está sendo enviada para os seus contatos de confiança.",
+                    textAlign = TextAlign.Center
+                )
+            }
+        }
+    }
+
 }
 
 
@@ -323,17 +367,14 @@ fun openWhatsAppChooser(
     context: android.content.Context,
     message: String
 ) {
-    //Intent genérica para compartilhar texto
     val sendIntent = Intent().apply {
         action = Intent.ACTION_SEND
         putExtra(Intent.EXTRA_TEXT, message)
         type = "text/plain"
     }
 
-
     //Mostrar todos apps que podem receber texto (WhatsApp normal e Business, Telegram etc)
     val chooser = Intent.createChooser(sendIntent, "Compartilhar via")
-
 
     try {
         context.startActivity(chooser)
