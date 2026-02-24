@@ -42,7 +42,7 @@ class EmergencyWorker(
             applicationContext,
             CHANNEL_ID
         )
-            .setSmallIcon(R.drawable.ic_notification)
+            .setSmallIcon(R.drawable.ic_stat_name)
             .setContentTitle("ElaSegura")
             .setContentText(message)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
